@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logisena/src/models/transfer_order_model.dart';
+import 'package:logisena/src/providers/sessions_provider.dart';
 import 'package:logisena/src/providers/transfer_orders_provider.dart';
 
 class HomePage extends StatelessWidget {
   final storage = FlutterSecureStorage();
+  final _sessionsProvider = SessionsProvider();
 
   final transferOrdersProvider = new TransferOrdersProvider();
 
@@ -12,19 +14,19 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     transferOrdersProvider.getTransferOrders();
     return Scaffold(
-      drawer: _menu(),
+      drawer: _menu(context),
       appBar: AppBar(
         backgroundColor: Colors.redAccent[400],
         title: Text("Logisena Transportes"),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              print('Menu was pressed');
-            },
-          )
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: Icon(Icons.menu),
+        //     onPressed: () {
+        //       print('Menu was pressed');
+        //     },
+        //   )
+        // ],
         // automaticallyImplyLeading: true,
         toolbarOpacity: 0.9,
       ),
@@ -57,7 +59,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _menu() {
+  Widget _menu(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -66,8 +68,21 @@ class HomePage extends StatelessWidget {
             decoration: BoxDecoration(color: Colors.red),
           ),
           ListTile(
-            title: Text("Salir"),
-            onTap: () {},
+            leading: Icon(
+              Icons.exit_to_app,
+              color: Colors.red[400],
+            ),
+            title: Text(
+              "Cerrar Sesión",
+              style: TextStyle(
+                  color: Colors.red[400],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+            ),
+            onTap: () {
+              _sessionsProvider.destroySession();
+              Navigator.pushReplacementNamed(context, 'login');
+            },
           )
         ],
       ),
@@ -86,9 +101,9 @@ class HomePage extends StatelessWidget {
               transferOrdersList.add(_transferOrder);
             });
             return Column(children: transferOrdersList);
-          } else {
-            return CircularProgressIndicator();
           }
+        } else {
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

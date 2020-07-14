@@ -5,9 +5,9 @@ import 'package:logisena/src/providers/configuration.dart';
 
 class SessionsProvider {
   final _storage = FlutterSecureStorage();
+  final _url = Configurations.sessions;
 
   Future<bool> createSession(email, password) async {
-    final _url = Configurations.sessions;
     final _body = {"employee[email]": email, "employee[password]": password};
     final response = await http.post(_url, body: _body);
     if (response.statusCode == 201) {
@@ -17,6 +17,18 @@ class SessionsProvider {
       return true;
     }
     return false;
+  }
+
+  Future<bool> destroySession() async {
+    final _jwt = await _storage.read(key: 'jwt');
+    final _headers = {'Authorization': _jwt};
+    final response = await http.delete(_url, headers: _headers);
+    // if (response.statusCode == 204 || response.statusCode == 401) {
+    await _storage.delete(key: 'email');
+    await _storage.delete(key: 'jwt');
+    return true;
+    // }
+    // return false;
   }
 
   Future<bool> tryJWTLogin() async {
