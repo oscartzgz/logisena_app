@@ -1,4 +1,4 @@
-package com.example.logisena
+package dev.azaka.logisena
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
