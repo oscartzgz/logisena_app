@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logisena/src/bloc/provider.dart';
 import 'package:logisena/src/pages/home_page.dart';
 import 'package:logisena/src/pages/login_page.dart';
+import 'package:logisena/src/pages/transfer_order_page.dart';
 import 'package:logisena/src/providers/sessions_provider.dart';
 
 void main() => runApp(MyApp());
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
             initialRoute: initialRoute,
             routes: {
               'login': (BuildContext context) => LoginPage(),
-              'home': (BuildContext context) => HomePage()
+              'home': (BuildContext context) => HomePage(),
+              'transfer_order': (BuildContext context) => TransferOrderPage(),
             },
           ));
         });

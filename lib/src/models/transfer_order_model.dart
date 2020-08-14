@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
+
+import 'package:logisena/src/providers/transfer_orders_provider.dart';
 // To parse this JSON data, do
 //
 //     final transferOrder = transferOrderFromJson(jsonString);
@@ -8,10 +11,61 @@ import 'dart:convert';
 // TransferOrder transferOrderFromJson(String str) => TransferOrder.fromJsonList(json.decode(str));
 
 // String transferOrderToJson(TransferOrder data) => json.encode(data.toJson());
+final transferOrdersProvider = TransferOrdersProvider();
+Future<List<TransferOrderModel>> _getTransferOrders(int length) async {
+  List<TransferOrderModel> transferOrders =
+      await transferOrdersProvider.getTransferOrders();
+  return transferOrders;
+}
+
+class TransferOrdersModel {
+  Stream<List<TransferOrderModel>> stream;
+  bool hasMore;
+
+  bool _isLoading;
+  List<TransferOrderModel> _data;
+  StreamController<List<TransferOrderModel>> _controller;
+
+// Constructor
+  TransferOrdersModel() {
+    _data = List<TransferOrderModel>();
+    _controller = StreamController<List<TransferOrderModel>>.broadcast();
+    _isLoading = false;
+    stream =
+        _controller.stream.map((List<TransferOrderModel> transferOrdersData) {
+      return transferOrdersData.map((TransferOrderModel transferOrderData) {
+        return transferOrderData;
+        // return TransferOrderModel.fromJson(transferOrderData);
+      }).toList();
+    });
+    hasMore = true;
+    refresh();
+  }
+
+  Future<void> refresh() {
+    return loadMore(clearCacheData: true);
+  }
+
+  Future<void> loadMore({bool clearCacheData = false}) {
+    if (clearCacheData) {
+      _data = List<TransferOrderModel>();
+      hasMore = true;
+    }
+    if (_isLoading || !hasMore) {
+      return Future.value();
+    }
+    _isLoading = true;
+    return _getTransferOrders(10).then((transferOrderData) {
+      _isLoading = false;
+      _data.addAll(transferOrderData);
+      hasMore = (_data.length < 30);
+      _controller.add(_data);
+    });
+  }
+}
 
 class TransferOrders {
   List<TransferOrderModel> items = new List();
-
   TransferOrders();
 
   TransferOrders.fromJsonList(List<dynamic> jsonList) {
@@ -60,14 +114,14 @@ class TransferOrderModel {
 }
 
 class Attributes {
-  Attributes({
-    this.code,
-    this.status,
-    this.transferredAt,
-    this.deliveredAt,
-    this.originDirectory,
-    this.destinationDirectory,
-  });
+  Attributes(
+      {this.code,
+      this.status,
+      this.transferredAt,
+      this.deliveredAt,
+      this.originDirectory,
+      this.destinationDirectory,
+      this.paymentKm});
 
   String code;
   String status;
@@ -75,6 +129,7 @@ class Attributes {
   dynamic deliveredAt;
   NDirectory originDirectory;
   NDirectory destinationDirectory;
+  int paymentKm;
 
   factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
         code: json["code"],
@@ -85,6 +140,7 @@ class Attributes {
         originDirectory: NDirectory.fromJson(json["origin_directory"]),
         destinationDirectory:
             NDirectory.fromJson(json["destination_directory"]),
+        paymentKm: json["payment_km"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -94,6 +150,7 @@ class Attributes {
         "delivered_at": deliveredAt,
         "origin_directory": originDirectory.toJson(),
         "destination_directory": destinationDirectory.toJson(),
+        "payment_km": paymentKm,
       };
 }
 

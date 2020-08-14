@@ -7,7 +7,7 @@ import 'package:logisena/src/providers/configuration.dart';
 
 class TransferOrdersProvider {
   final storage = new FlutterSecureStorage();
-  final String _url = Configurations.transfer_orders;
+  final String _url = Configurations.transferOrders;
   var jwtToken;
   bool _loading = false;
 
@@ -63,9 +63,9 @@ class TransferOrdersProvider {
     final Map<String, String> headers = {"Authorization": _jwt};
     final response = await http.get(_url, headers: headers);
     if (response.statusCode == 200) {
-      final List<TransferOrderModel> transfer_orders =
+      final List<TransferOrderModel> transferOrders =
           TransferOrders.fromJsonList(json.decode(response.body)['data']).items;
-      return transfer_orders;
+      return transferOrders;
     } else {
       return null;
     }
