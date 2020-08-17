@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
       drawer: _menu(context),
       appBar: AppBar(
         backgroundColor: Colors.redAccent[400],
-        title: Text("Logisena Transportes"),
+        title: Text("Ordenes de Traslado"),
         centerTitle: true,
         toolbarOpacity: 0.9,
       ),
@@ -98,9 +98,12 @@ class _HomePageState extends State<HomePage> {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          DrawerHeader(
-            child: Text("DrawerHeader"),
-            decoration: BoxDecoration(color: Colors.red),
+          UserAccountsDrawerHeader(
+            accountName: Text('User'),
+            accountEmail: Text("email@logisena.com"),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: AssetImage('logisena-logo.png'),
+            ),
           ),
           ListTile(
             leading: Icon(

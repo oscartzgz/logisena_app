@@ -121,7 +121,12 @@ class Attributes {
       this.deliveredAt,
       this.originDirectory,
       this.destinationDirectory,
-      this.paymentKm});
+      this.paymentKm,
+      this.chasisNumber,
+      this.vehicleModel,
+      this.vehicleCode,
+      this.bodywork,
+      this.clientName});
 
   String code;
   String status;
@@ -130,6 +135,11 @@ class Attributes {
   NDirectory originDirectory;
   NDirectory destinationDirectory;
   int paymentKm;
+  String chasisNumber;
+  String vehicleModel;
+  String vehicleCode;
+  bool bodywork;
+  String clientName;
 
   factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
         code: json["code"],
@@ -141,6 +151,11 @@ class Attributes {
         destinationDirectory:
             NDirectory.fromJson(json["destination_directory"]),
         paymentKm: json["payment_km"],
+        chasisNumber: json["chasis_number"],
+        vehicleModel: json["vehicle_model"],
+        vehicleCode: json["vehicle_code"],
+        bodywork: json["bodywork"] ?? false,
+        clientName: json["client_name"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -151,6 +166,11 @@ class Attributes {
         "origin_directory": originDirectory.toJson(),
         "destination_directory": destinationDirectory.toJson(),
         "payment_km": paymentKm,
+        "chasis_number": chasisNumber,
+        "vehicle_model": vehicleModel,
+        "vehicle_code": vehicleCode,
+        "bodywork": bodywork,
+        "client_name": clientName,
       };
 }
 
