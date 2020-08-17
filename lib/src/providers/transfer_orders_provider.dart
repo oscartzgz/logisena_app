@@ -3,11 +3,11 @@ import 'dart:convert' show json, base64, ascii;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:logisena/src/models/transfer_order_model.dart';
-import 'package:logisena/src/providers/configuration.dart';
+import 'package:logisena/src/api.dart';
 
 class TransferOrdersProvider {
   final storage = new FlutterSecureStorage();
-  final String _url = Configurations.transferOrders;
+  final String _url = Api.transferOrders;
   var jwtToken;
   bool _loading = false;
 

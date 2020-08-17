@@ -3,7 +3,7 @@ import 'package:logisena/src/providers/sessions_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:logisena/src/bloc/login_bloc.dart';
 import 'package:logisena/src/bloc/provider.dart';
-import 'package:logisena/src/providers/configuration.dart';
+import 'package:logisena/src/api.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -202,7 +202,7 @@ class LoginPage extends StatelessWidget {
   }
 
   _launchURL() async {
-    var url = Configurations.forgotPasswordUrl;
+    var url = Api.forgotPasswordUrl;
     if (await canLaunch(url)) {
       await launch(url);
     } else {

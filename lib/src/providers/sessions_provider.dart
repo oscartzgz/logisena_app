@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:logisena/src/providers/configuration.dart';
+import 'package:logisena/src/api.dart';
 
 class SessionsProvider {
   final _storage = FlutterSecureStorage();
-  final _url = Configurations.sessions;
+  final _url = Api.sessions;
 
   Future<bool> createSession(email, password) async {
     final _body = {"employee[email]": email, "employee[password]": password};
@@ -33,7 +33,7 @@ class SessionsProvider {
 
   Future<bool> tryJWTLogin() async {
     final _jwt = await _getJWT();
-    final _url = Configurations.sessions;
+    final _url = Api.sessions;
     final _headers = {'Authorization': _jwt};
     final response = await http.get(_url, headers: _headers);
     if (response.statusCode == 200) return true;

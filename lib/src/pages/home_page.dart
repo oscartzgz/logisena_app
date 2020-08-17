@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:logisena/src/models/profile_model.dart';
 import 'package:logisena/src/models/transfer_order_model.dart';
 import 'package:logisena/src/pages/transfer_order_arguments.dart';
+import 'package:logisena/src/providers/profile_provider.dart';
 import 'package:logisena/src/providers/sessions_provider.dart';
 import 'package:logisena/src/providers/transfer_orders_provider.dart';
+
+import '../api.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -95,15 +99,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _menu(BuildContext context) {
+    final _profielProvider = ProfileProvider();
+
     return Drawer(
       child: ListView(
         children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text('User'),
-            accountEmail: Text("email@logisena.com"),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('logisena-logo.png'),
-            ),
+          FutureBuilder(
+            future: _profielProvider.getProfile(),
+            builder: (BuildContext context, AsyncSnapshot _snapshot) {
+              if (_snapshot.hasData) {
+                final ProfileModel profile = _snapshot.data;
+                final urlImage =
+                    "${Api.domain}/${profile.attributes.photo.thumb.url}";
+
+                return UserAccountsDrawerHeader(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.blue[700], Colors.redAccent])),
+                  accountName: Text(profile.attributes.fullName),
+                  accountEmail:
+                      Text("Matricula: ${profile.attributes.enrollment}"),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage: NetworkImage(urlImage),
+                  ),
+                );
+              } else {
+                return DrawerHeader(
+                    child: Center(
+                  child: CircularProgressIndicator(),
+                ));
+              }
+            },
           ),
           ListTile(
             leading: Icon(
