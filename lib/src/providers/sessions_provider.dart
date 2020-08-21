@@ -7,13 +7,16 @@ class SessionsProvider {
   final _storage = FlutterSecureStorage();
   final _url = Api.sessions;
 
-  Future<bool> createSession(email, password) async {
-    final _body = {"employee[email]": email, "employee[password]": password};
+  Future<bool> createSession(enrollment, password) async {
+    final _body = {
+      "employee[enrollment]": enrollment,
+      "employee[password]": password
+    };
     final response = await http.post(_url, body: _body);
     if (response.statusCode == 201) {
       final decodedData = json.decode(response.body);
       _saveJwt(decodedData['token']);
-      _saveEmail(decodedData['email']);
+      _saveEnrollment(decodedData['enrollment']);
       return true;
     }
     return false;
@@ -24,7 +27,7 @@ class SessionsProvider {
     final _headers = {'Authorization': _jwt};
     final response = await http.delete(_url, headers: _headers);
     // if (response.statusCode == 204 || response.statusCode == 401) {
-    await _storage.delete(key: 'email');
+    await _storage.delete(key: 'enrollment');
     await _storage.delete(key: 'jwt');
     return true;
     // }
@@ -45,9 +48,9 @@ class SessionsProvider {
     await storage.write(key: 'jwt', value: jwt);
   }
 
-  _saveEmail(String email) async {
+  _saveEnrollment(String enrollment) async {
     final storage = FlutterSecureStorage();
-    await storage.write(key: 'email', value: email);
+    await storage.write(key: 'enrollment', value: enrollment);
   }
 
   Future<String> _getJWT() async {

@@ -117,19 +117,19 @@ class LoginPage extends StatelessWidget {
 
   Widget _crearEmail(LoginBloc bloc) {
     return StreamBuilder(
-      stream: bloc.emailStream,
+      stream: bloc.enrollmentStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: TextField(
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(
-                icon: Icon(Icons.alternate_email, color: Colors.redAccent),
-                hintText: 'ejemplo@correo.com',
-                labelText: 'Correo electrónico',
+                icon: Icon(Icons.code, color: Colors.redAccent),
+                hintText: 'Matricula',
+                labelText: 'Matricula',
                 // counterText: snapshot.data,
                 errorText: snapshot.error),
-            onChanged: bloc.changeEmail,
+            onChanged: bloc.changeEnrollment,
           ),
         );
       },
@@ -178,20 +178,9 @@ class LoginPage extends StatelessWidget {
   }
 
   Future<dynamic> _attemptLogIn(LoginBloc bloc, BuildContext context) async {
-    // final String _url = Configurations.sessions;
-    // var res = await http.post(_url, body: {
-    //   "employee[email]": bloc.email,
-    //   "employee[password]": bloc.password
-    // });
-    // if (res.statusCode == 200) {
-    //   print(res);
-    //   return res;
-    // }
-    // return null;
-
     final SessionsProvider sessionProvider = SessionsProvider();
     final bool sessionCreated =
-        await sessionProvider.createSession(bloc.email, bloc.password);
+        await sessionProvider.createSession(bloc.enrollment, bloc.password);
 
     if (sessionCreated) {
       Navigator.pushReplacementNamed(context, 'home');
