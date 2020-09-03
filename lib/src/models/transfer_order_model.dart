@@ -126,7 +126,8 @@ class Attributes {
       this.vehicleModel,
       this.vehicleCode,
       this.bodywork,
-      this.clientName});
+      this.clientName,
+      this.driverDue});
 
   String code;
   String status;
@@ -140,6 +141,7 @@ class Attributes {
   String vehicleCode;
   bool bodywork;
   String clientName;
+  double driverDue;
 
   factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
         code: json["code"],
@@ -156,6 +158,7 @@ class Attributes {
         vehicleCode: json["vehicle_code"],
         bodywork: json["bodywork"] ?? false,
         clientName: json["client_name"],
+        driverDue: double.parse(json["driver_due"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -171,6 +174,7 @@ class Attributes {
         "vehicle_code": vehicleCode,
         "bodywork": bodywork,
         "client_name": clientName,
+        "driver_due": driverDue,
       };
 }
 

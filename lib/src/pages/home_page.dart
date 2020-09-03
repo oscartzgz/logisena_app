@@ -5,6 +5,7 @@ import 'package:logisena/src/pages/transfer_order_arguments.dart';
 import 'package:logisena/src/providers/profile_provider.dart';
 import 'package:logisena/src/providers/sessions_provider.dart';
 import 'package:logisena/src/providers/transfer_orders_provider.dart';
+import 'package:logisena/src/pages/shared/status_breadcrumb.dart';
 
 import '../api.dart';
 
@@ -134,6 +135,27 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           ListTile(
+            leading: Container(
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                  color: Colors.red, borderRadius: BorderRadius.circular(15)),
+              child: Icon(
+                Icons.attach_money,
+                color: Colors.white,
+              ),
+            ),
+            title: Text(
+              "Deudas de OTs",
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, 'debts');
+            },
+          ),
+          ListTile(
             leading: Icon(
               Icons.exit_to_app,
               color: Colors.red[400],
@@ -203,14 +225,15 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                  decoration: _labelOk,
-                  child: Text(
-                    transferOrder.attributes.status,
-                    style: _labelTextStyle,
-                  ),
-                )
+                renderStatusBreadcrumb(transferOrder)
+                // Container(
+                //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                //   decoration: _labelOk,
+                //   child: Text(
+                //     transferOrder.attributes.status,
+                //     style: _labelTextStyle,
+                //   ),
+                // )
               ],
             ),
             SizedBox(height: 10),

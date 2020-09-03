@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logisena/src/bloc/provider.dart';
+import 'package:logisena/src/pages/debts_page.dart';
 import 'package:logisena/src/pages/home_page.dart';
 import 'package:logisena/src/pages/login_page.dart';
 import 'package:logisena/src/pages/transfer_order_page.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
               'login': (BuildContext context) => LoginPage(),
               'home': (BuildContext context) => HomePage(),
               'transfer_order': (BuildContext context) => TransferOrderPage(),
+              'debts': (BuildContext context) => DebtsPage(),
             },
           ));
         });
