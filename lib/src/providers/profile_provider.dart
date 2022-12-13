@@ -12,7 +12,7 @@ class ProfileProvider {
   Future<ProfileModel> getProfile() async {
     final jwt = await storage.read(key: 'jwt');
     final Map<String, String> headers = {"Authorization": jwt};
-    final response = await http.get(Api.profile, headers: headers);
+    final response = await http.get(Uri.parse(Api.profile), headers: headers);
     if (response.statusCode == 200) {
       final decodedData =
           ProfileModel.fromJson(json.decode(response.body)['data']);

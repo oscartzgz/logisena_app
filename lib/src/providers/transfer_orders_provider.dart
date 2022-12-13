@@ -7,7 +7,7 @@ import 'package:logisena/src/api.dart';
 
 class TransferOrdersProvider {
   final storage = new FlutterSecureStorage();
-  final String _url = Api.transferOrders;
+  final _url = Uri.parse(Api.transferOrders);
   var jwtToken;
   bool _loading = false;
 
@@ -74,7 +74,7 @@ class TransferOrdersProvider {
   Future<List<TransferOrderModel>> getDebtTransferOrders() async {
     final _jwt = await storage.read(key: 'jwt');
     final Map<String, String> headers = {"Authorization": _jwt};
-    final response = await http.get(Api.debts, headers: headers);
+    final response = await http.get(Uri.parse(Api.debts), headers: headers);
     if (response.statusCode == 200) {
       final List<TransferOrderModel> transferOrders =
           TransferOrders.fromJsonList(json.decode(response.body)['data']).items;

@@ -5,7 +5,7 @@ import 'package:logisena/src/api.dart';
 
 class SessionsProvider {
   final _storage = FlutterSecureStorage();
-  final _url = Api.sessions;
+  final _url = Uri.parse(Api.sessions);
 
   Future<bool> createSession(enrollment, password) async {
     final _body = {
@@ -36,7 +36,7 @@ class SessionsProvider {
 
   Future<bool> tryJWTLogin() async {
     final _jwt = await _getJWT();
-    final _url = Api.sessions;
+    final _url = Uri.parse(Api.sessions);
     final _headers = {'Authorization': _jwt};
     final response = await http.get(_url, headers: _headers);
     if (response.statusCode == 200) return true;
